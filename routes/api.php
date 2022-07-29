@@ -18,7 +18,8 @@ use Psy\TabCompletion\AutoCompleter;
 |
 */
 
-Route::post('/',function(){
+Route::get('/',function(){
+    return "Welcome to my app";
 
 });
 

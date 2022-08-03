@@ -9,42 +9,32 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
-{
+{   
+    
    public function createTask(Request $request){
-    try {
+    
+    try {        
+        Log::info("Entro en create task");
+        $name = $request->input('name');
+        $description = $request->input('description');
+        $realized = $request->input('realized');
+        $userId = auth()->user()->id;
 
-        
-        $validator = Validator::make($request->all(),
-            [
-                'name' => 'required|string|max:25',
-                'description' => 'required|string|max:255'               
-            ]
-        );
-
-        if($validator->fails()){
-            return response()->json(
-
-                [
-                    'success'=> true,
-                    'message' => $validator->errors()
-                ],
-                400
-            );
-        }
+        Log::info("Obtengo userId", $userId);
        
-        $task = Task::create(
-            [
-                'name' => $request->get('name'),
-                'description' => $request->get('description'),
-                'realized' => $request->get('realized') ?? false                    
-            ]
-        );
+        $newTask = new Task();
+        $newTask->name = $name;
+        $newTask->description = $description;
+        $newTask->realized = $realized;
+        $newTask->user_id = $userId;
+        $newTask->save();   
+        Log::info('obtengo newtask', $newTask);    
 
         return response()->json(
             [
                 'success' => true,
                 'message' => "task created successfully",
-                'data' => $task,
+                'data' => $newTask,
             ],
             200
         );

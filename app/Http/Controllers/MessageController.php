@@ -139,8 +139,9 @@ class MessageController extends Controller
 
             return response()->json(
                 [
-                    "success" => true,
-                    "message" => 'Error to deleting message'
+                    "success" => false,
+                    "message" => 'Error to deleting message',
+                    "error" => $exception->getMessage()
                 ],
                 500
             );

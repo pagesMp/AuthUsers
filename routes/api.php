@@ -72,6 +72,7 @@ Route::group(
         function(){
         Route::post('/createMessage/{id}', [MessageController::class, 'createMessage']);
         Route::get('/viewMessages/{id}', [MessageController::class, 'viewMessages']);
+        Route::delete('/deleteMessage/{id}', [MessageController::class, 'deleteMessage']);
         
        
 }

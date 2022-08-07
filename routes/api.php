@@ -1,7 +1,10 @@
 <?php
 
+
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PartyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,17 +25,20 @@ Route::get('/',function(){
     return "Welcome to my app";
 
 });
-
+//REGISTER
 Route::post('/register', [AuthController::class, 'register']);
+//LOGIN
 Route::post('/login',[AuthController::class, 'login']);
-
+//PROFILE
 Route::group(
     ['middleware' => 'jwt.auth'],
         function(){
-            Route::get('/me', [AuthController::class, 'me']);
+            Route::get('/profile', [AuthController::class, 'profile']);
+            Route::get('/logout', [AuthController::class, 'logout']);
+            Route::put('/profile/config/{id}', [AuthController::class, 'update']);
         }
 );
-
+//AÑADIR SUPER/SUPRIMIR ADMIN
 Route::group(
     ['middleware' => ['jwt.auth','isSuperAdmin']],
         function(){
@@ -40,20 +46,38 @@ Route::group(
             Route::post('/deleteSuperAdmin/{id}', [UserController::class, 'deleteSuperAdmin']);
         }
 );
-
-
-//Tasks
+//CRUD GAMES
 Route::group(
     ['middleware' => 'jwt.auth'],
         function(){
-            Route::post('/task/create', [TaskController::class,'createTask']);
-            Route::get('/task',[TaskController::class, 'getTaskById']);
-            Route::get('task/{id}', [TaskController::class, 'getOneTaskById']);
-            Route::delete('task/{task}',[TaskController::class, 'destroyByTask']);
+            Route::post('/adUserGame/{id}', [GameController::class, 'adUserGame']);
+            Route::delete('/leaveUserGame/{id}', [GameController::class, 'leaveUserGame']);
+            Route::post('/createGame', [GameController::class, 'createGame']);
+            Route::get('/findParties/{id}', [GameController::class, 'findParties']);
         }
 );
+//CRUD PARTY
+Route::group(
+    ['middleware' => 'jwt.auth'],
+        function(){
+        Route::post('/adUserParty/{id}', [PartyController::class, 'adUserParty']);
+        Route::delete('/leaveUserParty/{id}', [PartyController::class, 'leaveUserParty']);
+        Route::post('/createParty/{id}', [PartyController::class, 'createParty']);
+       
+}
+);
+//CRUD MESSAGE
+Route::group(
+    ['middleware' => 'jwt.auth'],
+        function(){
+        Route::post('/createMessage/{id}', [MessageController::class, 'createMessage']);
+        Route::get('/viewMessages/{id}', [MessageController::class, 'viewMessages']);
+        
+       
+}
+);
 
-// Route::put('/task/update', 'updateTask');
+
 
 
 

@@ -76,7 +76,35 @@ class AuthController extends Controller
         ]);
     }
 
-    public function me(){
+    public function logout(Request $request){
+        try {
+
+            $this->validate($request,
+                [
+                    'token' => 'require'
+                ]);
+
+            JWTAuth::invalidate($request->token);
+            return response()->json(
+                [
+                    'success' => true,
+                    'token' => 'You have successfully logged out'
+                ]);
+
+        } catch (\Exception $exception) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'You cant logout because you are not logged yet'
+                ],
+            404
+            );
+            
+        }
+
+    }
+    
+    public function profile(){
         return response()->json(
             [
             "susccess" => true,
@@ -84,4 +112,47 @@ class AuthController extends Controller
             ]
         );
     }
+
+    public function update(Request $request, $id){
+
+        try {
+            $user = User::query()->find($id);
+
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $password = $request->input('password');
+
+            if(isset($name)){
+                $user->name = $name;               
+            };
+
+            if(isset($email)){
+                $user->email = $email;               
+            };
+
+            if(isset($password)){
+                $user->password = bcrypt($password);               
+            };
+
+            $user->save();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'you have modifcate your profile successfully'
+                ],
+            200
+            );
+
+        }catch (\Exception $exception) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'You cant modify you profile'
+                ],
+            404
+            );
+        }
+    }
+
 }

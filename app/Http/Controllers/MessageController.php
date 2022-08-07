@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
+    //CONTROLADOR DE CREAR MENSAJE
     public function createMessage(Request $request, $id){
         try {
             
             $text = $request->input('text');
             $partyId =$id;
             $userId = auth()->user()->id;
+            //VALIDAMOS QUE EL USER ESTA EN LA PARTY
             $userParties = DB::table('party_user')->where('user_id', $userId)->get('id');
             $isInParty = false;
             Log::info('que hace esto¿ ' . $userParties);

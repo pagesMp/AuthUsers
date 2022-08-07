@@ -37,7 +37,7 @@ https://pagesmp-heroku-chat.herokuapp.com/api
 
 . POST /createMessage/id -> crear un mensaje<br>
 . GET /viewMessages/id -> ver mensajes<br>
-. DELETE /deleteMessage/id -> eliminar mensaj<br>e
+. DELETE /deleteMessage/id -> eliminar mensaje<br>
 
 
 

@@ -104,5 +104,48 @@ class MessageController extends Controller
         }
     }
 
+    public function deleteMessage($id)
+    {
+        try {
+            Log::info('Eliminar Message por id');
+
+            $userId = auth()->user()->id;
+            $message = Message::query()->where('id', $id)->get();
+            if(!$message->user_id == $userId){
+                return response()->json(
+                    [
+                        "success" => false,
+                        "message" => 'this message is not yours DOG',
+                        "data" => $message
+    
+                    ],
+                400
+                );
+            }
+
+            $message->delete();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => 'messages deleted',
+                    "data" => $message
+
+                ],
+            200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error deleting this message ' .$exception->getMessage());
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => 'Error to deleting message'
+                ],
+                500
+            );
+        }
+    }
+
 }
 

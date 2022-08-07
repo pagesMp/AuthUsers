@@ -16,17 +16,20 @@ class MessageController extends Controller
             $text = $request->input('text');
             $partyId =$id;
             $userId = auth()->user()->id;
-            //VALIDAMOS QUE EL USER ESTA EN LA PARTY
+            //cojemos las partis en las que esta el user
             $userParties = DB::table('party_user')->where('user_id', $userId)->get('id');
+            //por defecto el user no se encuentra en la party
             $isInParty = false;
             Log::info('que hace esto¿ ' . $userParties);
-
+            //buscamos por cada party, que corresponda a la party actual
             foreach ($userParties as $party) {
                 Log::info('que muestras tu ' . $party->id);
+            //Si corresponde, el user se encuentra dentro de la party
                 if($partyId == $party->id){
                     $isInParty = true;
                 }
             }
+            //Si no esta en la party, salta el siguiente error 
             if($isInParty == false){
                 return response()->json(
                     [
@@ -80,7 +83,7 @@ class MessageController extends Controller
                 400
                 );
             }
-            
+            //ordenamos los mensajes descendentemente
             $orderedMessages = $messages->sortByDesc('created_at');
             $orderedMessages->values()->all();
 

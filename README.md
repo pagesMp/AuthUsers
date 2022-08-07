@@ -14,31 +14,30 @@ https://pagesmp-heroku-chat.herokuapp.com/api
 
 ## END-POINTS USER
  
-. /register -> para registrarse (name, email & password)
-. /login -> para logearse (email&password)
-. /profile -> veremos nuestro perfil
-. /profile/config/id -> modificaremos nuestro profile
-. /logout -> nos deslogeamos
+. POST /register -> para registrarse (name, email & password)<br>
+. POST /login -> para logearse (email&password)<br>
+. GET /profile -> veremos nuestro perfil<br>
+. PUT /profile/config/id -> modificaremos nuestro profile<br>
+. GET /logout -> nos deslogeamos<br>
 
 ## END-POINTS GAME
 
-. /createGame -> crear un juego (name & category)
-. /adUserGame/id -> entrar en un juego
-. /leaveUserGame/id -> salir de un juego
-. /findParties/id -> buscar las parties que hay en un juego
+. POST /createGame -> crear un juego (name & category)<br>
+. POST /adUserGame/id -> entrar en un juego<br>
+. DELETE /leaveUserGame/id -> salir de un juego<br>
+. GET /findParties/id -> buscar las parties que hay en un juego<br>
 
 ## END-POINTS PARTY
 
-. /createParty/id -> crear una party
-. /adUserParty/id -> unirse a una party
-. /leaveUserParty/id -> salir de una party
+. POST /createParty/id -> crear una party<br>
+. POST /adUserParty/id -> unirse a una party<br>
+. DELETE /leaveUserParty/id -> salir de una party<br>
 
 ## END-POINTS MESSAGE
 
-. /createMessage/id -> crear un mensaje 
-. /viewMessages/id -> ver mensajes
-. /deleteMessage/id -> eliminar mensaje
-
+. POST /createMessage/id -> crear un mensaje<br>
+. GET /viewMessages/id -> ver mensajes<br>
+. DELETE /deleteMessage/id -> eliminar mensaje<br>
 
 
 

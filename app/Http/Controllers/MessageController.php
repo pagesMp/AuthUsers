@@ -110,8 +110,8 @@ class MessageController extends Controller
             Log::info('Eliminar Message por id');
 
             $userId = auth()->user()->id;
-            $message = Message::query()->where('id', $id)->get();
-            if(!$message->user_id == $userId){
+            $message = Message::query()->where('id', $id);
+            if(!$message->get()->user_id == $userId){
                 return response()->json(
                     [
                         "success" => false,

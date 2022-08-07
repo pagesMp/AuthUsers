@@ -111,7 +111,7 @@ class MessageController extends Controller
 
             $userId = auth()->user()->id;
             $message = Message::query()->where('id', $id);
-            if(!$message->get()->user_id == $userId){
+            if(!$message->find($id)->user_id == $userId){
                 return response()->json(
                     [
                         "success" => false,

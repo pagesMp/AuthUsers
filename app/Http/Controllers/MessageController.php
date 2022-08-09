@@ -116,6 +116,7 @@ class MessageController extends Controller
 
             $userId = auth()->user()->id;
             $message = Message::query()->where('id', $id);
+
             if(!$message->find($id)->user_id == $userId){
                 return response()->json(
                     [
@@ -156,13 +157,16 @@ class MessageController extends Controller
     public function updateMessage(Request $request, $id){
 
         try {
+            $partyId =$id;
+            $userId = auth()->user()->id;
             $text = Message::query()->find($id);
 
             $newText = $request->input('text');
             
-            if(isset($text)){
-                $newText->text = $text;               
-            }
+            $newText = new Message();
+            $newText->text = $text;
+            $newText->party_id = $partyId;
+            $newText->user_id = $userId;            
 
             $newText->save(); 
 

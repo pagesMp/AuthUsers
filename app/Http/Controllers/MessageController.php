@@ -157,24 +157,19 @@ class MessageController extends Controller
     public function updateMessage(Request $request, $id){
 
         try {
-            $partyId =$id;
+           
             $userId = auth()->user()->id;
-            $text = Message::query()->find($id);
+            $text  = Message::query()->where('user_id', $userId)->find($id);
 
-            $newText = $request->input('text');
-            
-            $newText = new Message();
-            $newText->text = $text;
-            $newText->party_id = $partyId;
-            $newText->user_id = $userId;            
+            $text->text= $request->input('text');                      
 
-            $newText->save(); 
+            $text->save(); 
 
             return response()->json(
             [
                 "success" => true,
                 "message" => 'message updated',
-                "data" => $newText
+                "data" => $text
 
             ],
         200

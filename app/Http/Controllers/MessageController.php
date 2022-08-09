@@ -161,9 +161,18 @@ class MessageController extends Controller
             $userId = auth()->user()->id;
             $text  = Message::query()->where('user_id', $userId)->find($id);
 
-            $text->text= $request->input('text');                      
+            if(!$text){
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'message not found with this ID '
+                    ]
+                );
+            }
 
+            $text->text= $request->input('text'); 
             $text->save(); 
+
 
             return response()->json(
             [

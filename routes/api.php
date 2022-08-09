@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Psy\TabCompletion\AutoCompleter;
+use Symfony\Component\Translation\MessageCatalogue;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,7 @@ Route::group(
         Route::post('/createMessage/{id}', [MessageController::class, 'createMessage']);
         Route::get('/viewMessages/{id}', [MessageController::class, 'viewMessages']);
         Route::delete('/deleteMessage/{id}', [MessageController::class, 'deleteMessage']);
+        Route::put('/updateMessage/{id}', [MessageController::class, 'updateMessage']);
         
        
 }

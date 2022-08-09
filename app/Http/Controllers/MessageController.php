@@ -153,5 +153,45 @@ class MessageController extends Controller
         }
     }
 
+    public function updateMessage(Request $request, $id){
+
+        try {
+            $text = Message::query()->find($id);
+
+            $newText = $request->input('text');
+            
+            if(isset($text)){
+                $newText->text = $text;               
+            }
+
+            $newText->save(); 
+
+            return response()->json(
+            [
+                "success" => true,
+                "message" => 'message updated',
+                "data" => $newText
+
+            ],
+        200
+        );
+        }catch (\Exception $exception) {
+            Log::error('Error updating this message ' .$exception->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => 'Error to updating message',
+                    "error" => $exception->getMessage()
+                ],
+            500
+            );
+        }
+        
+        
+
+    }
+
+
 }
 

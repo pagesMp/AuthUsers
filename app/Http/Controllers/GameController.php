@@ -16,9 +16,7 @@ class GameController extends Controller
          Log::info('Uniendote al game');
             $userId = auth()->user()->id;
             $gameId = $id; 
-            $user = User::query()->find($userId);         
-            // $game = Game::query()->find($gameId);
-            
+            $user = User::query()->find($userId);  
             $user->game()->attach($gameId);  
 
             return response()->json(
@@ -61,8 +59,7 @@ class GameController extends Controller
             //         ], 
             //     400
             //     );
-            // }
-            
+            // }            
             $user->game()->detach($gameId);  
 
             return response()->json(

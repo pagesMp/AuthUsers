@@ -30,7 +30,7 @@ class MessageController extends Controller
                 }
             }
             //Si no esta en la party, salta el siguiente error 
-            if($isInParty == false){
+            if(!$isInParty == false){
                 return response()->json(
                     [
                         'success'=> false,

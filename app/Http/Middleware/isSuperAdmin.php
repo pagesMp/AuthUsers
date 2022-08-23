@@ -28,9 +28,8 @@ class isSuperAdmin
         if(!$hasRole){
             return response()->json(
                 [
-                    "success"=> true,
-                    "message"=> "Dont have permisions"
-
+                    "success" => true,
+                    "message" => "Dont have permisions"
                 ],
                400
             );

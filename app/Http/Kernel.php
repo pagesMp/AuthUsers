@@ -66,6 +66,6 @@ class Kernel extends HttpKernel
         //importamos el jwt
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         //importamos middleware de SuperAdmin
-        'isSuperAdmin' => \App\Http\Middleware\IsSuperAdmin::class
+        'isSuperAdmin' => \App\Http\Middleware\IsSuperAdmin::class,
     ];
 }

@@ -55,7 +55,7 @@ Route::group(
 Route::group(
     ['middleware' => 'jwt.auth'],
     function(){
-        Route::post('/adUserGame/{id}', [GameController::class, 'adUserGame']);
+        Route::post('/addUserGame/{id}', [GameController::class, 'addUserGame']);
         Route::delete('/leaveUserGame/{id}', [GameController::class, 'leaveUserGame']);
         Route::get('/findParties/{id}', [GameController::class, 'findParties']);
     }

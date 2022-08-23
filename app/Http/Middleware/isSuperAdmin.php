@@ -23,7 +23,7 @@ class isSuperAdmin
         $userId = auth()->user()->id;
         $user = User::find($userId);
 
-        $hasRole = $user->roles->contains(21);
+        $hasRole = $user->roles->contains(3);
         
         if(!$hasRole){
             return response()->json(
@@ -32,7 +32,7 @@ class isSuperAdmin
                     "message"=> "Dont have permisions"
 
                 ],
-                400
+               400
             );
         }
         return $next($request);

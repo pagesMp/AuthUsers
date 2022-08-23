@@ -5,10 +5,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Psy\TabCompletion\AutoCompleter;
-use Symfony\Component\Translation\MessageCatalogue;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,21 +18,20 @@ use Symfony\Component\Translation\MessageCatalogue;
 |
 */
 
-Route::get('/',function(){
+Route::get('/', function () {
     return "Welcome to my app";
-
 });
 
 //REGISTER
 Route::post('/register', [AuthController::class, 'register']);
 
 //LOGIN
-Route::post('/login',[AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
 
 //PROFILE
 Route::group(
     ['middleware' => 'jwt.auth'],
-    function(){
+    function () {
         Route::get('/profile', [AuthController::class, 'profile']);
         Route::get('/logout', [AuthController::class, 'logout']);
         Route::put('/profile/config/{id}', [AuthController::class, 'update']);
@@ -44,17 +40,17 @@ Route::group(
 
 //AÑADIR SUPER/SUPRIMIR ADMIN
 Route::group(
-    ['middleware' => ['jwt.auth','isSuperAdmin']],
-    function(){
+    ['middleware' => ['jwt.auth', 'isSuperAdmin']],
+    function () {   
         Route::post('/adSuperAdmin/{id}', [UserController::class, 'adSuperAdmin']);
-        Route::post('/deleteSuperAdmin/{id}', [UserController::class, 'deleteSuperAdmin']);
+        Route::delete('/deleteSuperAdmin/{id}', [UserController::class, 'deleteSuperAdmin']);
     }
 );
 
 //CRUD GAMES
 Route::group(
     ['middleware' => 'jwt.auth'],
-    function(){
+    function () {
         Route::post('/addUserGame/{id}', [GameController::class, 'addUserGame']);
         Route::delete('/leaveUserGame/{id}', [GameController::class, 'leaveUserGame']);
         Route::get('/findParties/{id}', [GameController::class, 'findParties']);
@@ -63,29 +59,29 @@ Route::group(
 
 //CREATE GAMES BY ADMIN
 Route::group(
-    ['middleware' => ['jwt.auth','isSuperAdmin']],
-    function(){
-        Route::post('/createGame', [GameController::class, 'createGame']);   
+    ['middleware' => ['jwt.auth', 'isSuperAdmin']],
+    function () {
+        Route::post('/createGame', [GameController::class, 'createGame']);
     }
 );
 
 //CRUD PARTY
 Route::group(
     ['middleware' => 'jwt.auth'],
-    function(){
+    function () {
         Route::post('/addUserParty/{id}', [PartyController::class, 'addUserParty']);
         Route::delete('/leaveUserParty/{id}', [PartyController::class, 'leaveUserParty']);
-        Route::post('/createParty/{id}', [PartyController::class, 'createParty']);       
+        Route::post('/createParty/{id}', [PartyController::class, 'createParty']);
     }
 );
 
 //CRUD MESSAGE
 Route::group(
     ['middleware' => 'jwt.auth'],
-    function(){
+    function () {
         Route::post('/createMessage/{id}', [MessageController::class, 'createMessage']);
         Route::get('/viewMessages/{id}', [MessageController::class, 'viewMessages']);
         Route::delete('/deleteMessage/{id}', [MessageController::class, 'deleteMessage']);
-        Route::put('/updateMessage/{id}', [MessageController::class, 'updateMessage']);       
+        Route::put('/updateMessage/{id}', [MessageController::class, 'updateMessage']);
     }
 );

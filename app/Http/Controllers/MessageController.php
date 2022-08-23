@@ -10,97 +10,86 @@ use Illuminate\Support\Facades\Log;
 class MessageController extends Controller
 {
     //CONTROLADOR DE CREAR MENSAJE
-    public function createMessage(Request $request, $id){
+    public function createMessage(Request $request, $id)
+    {
         try {
-            
             $text = $request->input('text');
-            $partyId =$id;
+            $partyId = $id;
             $userId = auth()->user()->id;
-          
+
             //cojemos las partis en las que esta el user
-            $isInParty = DB::table('party_user')->where('user_id', $userId)->get()->party_id->contains($partyId);
-            //por defecto el user no se encuentra en la party
-            // $isInParty = false;
+            $isInParty = DB::table('party_user')->where('user_id', $userId)->pluck('party_id')->contains($partyId);
             Log::info('que hace esto¿ ' . $isInParty);
-            //buscamos por cada party, que corresponda a la party actual
-            // foreach ($userParties as $party) {
-                // Log::info('que muestras tu ' . $party->id);
-            //Si corresponde, el user se encuentra dentro de la party
-            //     if($partyId == $party->id){
-            //         $isInParty = true;
-            //     }
-            // }
-            //Si no esta en la party, salta el siguiente error 
-            if(!$isInParty == false){
+
+            //Si no esta en la party, salta el siguiente error y no te crea el mensaje 
+            if (!$isInParty) {
                 return response()->json(
                     [
-                        'success'=> false,
-                        'message'=> 'User is not in party'
+                        'success' => false,
+                        'message' => 'User is not in party'
                     ],
-                400
+                    400
                 );
             }
-                       
+
             $message = new Message();
             $message->text = $text;
             $message->party_id = $partyId;
             $message->user_id = $userId;
-            $message->save(); 
-           
+            $message->save();
+
             return response()->json(
                 [
-                    'success'=> true,
-                    'message'=> 'message successfully created',
-                    'data'=> $text
+                    'success' => true,
+                    'message' => 'message successfully created',
+                    'data' => $text
                 ],
-            200
+                200
             );
-
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             Log::error('Error cant this message ' . $exception->getMessage());
-   
-               return response()->json(
-                   [
-                       'success' => false,
-                       'message' => 'You cant create a message',
-                   ], 
-               400
-               );
-           }
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'You cant create a message',
+                ],
+                400
+            );
+        }
     }
 
-    public function viewMessages($id){
+    public function viewMessages($id)
+    {
         try {
             $partyId = $id;
-            $messages = Message::query()->where('party_id', $partyId)->orderBy('id','ASC')->get(['text','created_at']);
+            $messages = Message::query()->where('party_id', $partyId)->orderBy('id', 'ASC')->get(['text', 'created_at']);
 
-            if(count($messages) == 0 ){
+            if (count($messages) == 0) {
                 return response()->json(
                     [
                         'success' => false,
-                        'message' => 'Party have no messages'                        
-                    ], 
-                400
+                        'message' => 'Party have no messages'
+                    ],
+                    400
                 );
-            }           
+            }
             return response()->json(
                 [
                     'success' => true,
                     'message' => 'You can see all message from this party',
                     'data' => $messages
-                ], 
-            200
+                ],
+                200
             );
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             Log::error('Error cant find messages' . $exception->getMessage());
-   
-               return response()->json(
-                    [
-                       'success' => false,
-                       'message' => 'You cant find messages',
-                    ], 
-                    400
-                );
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'You cant find messages',
+                ],
+                400
+            );
         }
     }
 
@@ -108,22 +97,19 @@ class MessageController extends Controller
     {
         try {
             Log::info('Eliminar Message por id');
-
             $userId = auth()->user()->id;
             $message = Message::query()->where('id', $id);
 
-            if(!$message->find($id)->user_id == $userId){
+            if (!$message->find($id)->user_id == $userId) {
                 return response()->json(
                     [
                         "success" => false,
                         "message" => 'this message is not yours DOG',
                         "data" => $message
-    
                     ],
-                400
+                    400
                 );
             }
-
             $message->delete();
 
             return response()->json(
@@ -131,13 +117,11 @@ class MessageController extends Controller
                     "success" => true,
                     "message" => 'messages deleted',
                     "data" => $message
-
                 ],
-            200
+                200
             );
         } catch (\Exception $exception) {
-            Log::error('Error deleting this message ' .$exception->getMessage());
-
+            Log::error('Error deleting this message ' . $exception->getMessage());
             return response()->json(
                 [
                     "success" => false,
@@ -149,14 +133,13 @@ class MessageController extends Controller
         }
     }
 
-    public function updateMessage(Request $request, $id){
-
+    public function updateMessage(Request $request, $id)
+    {
         try {
-           
             $userId = auth()->user()->id;
             $text  = Message::query()->where('user_id', $userId)->find($id);
 
-            if(!$text){
+            if (!$text) {
                 return response()->json(
                     [
                         'success' => false,
@@ -164,37 +147,27 @@ class MessageController extends Controller
                     ]
                 );
             }
-
-            $text->text= $request->input('text'); 
-            $text->save(); 
-
+            $text->text = $request->input('text');
+            $text->save();
 
             return response()->json(
-            [
-                "success" => true,
-                "message" => 'message updated',
-                "data" => $text
-
-            ],
-        200
-        );
-        }catch (\Exception $exception) {
-            Log::error('Error updating this message ' .$exception->getMessage());
-
+                [
+                    "success" => true,
+                    "message" => 'message updated',
+                    "data" => $text
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error updating this message ' . $exception->getMessage());
             return response()->json(
                 [
                     "success" => false,
                     "message" => 'Error to updating message',
                     "error" => $exception->getMessage()
                 ],
-            500
+                500
             );
         }
-        
-        
-
     }
-
-
 }
-

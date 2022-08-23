@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PartyController extends Controller
-{         
-    public function addUserParty($id){
+{
+    public function addUserParty($id)
+    {
         try {
-        Log::info('entrando a la party');
+            Log::info('entrando a la party');
             $userId = auth()->user()->id;
-            $user = User::query()->find($userId); 
-            $user->party()->attach($id);  
+            $user = User::query()->find($userId);
+            $user->party()->attach($id);
 
             return response()->json(
                 [
@@ -23,23 +24,24 @@ class PartyController extends Controller
                     'message' => 'Congrats you added correctly to this party',
                     'data' => $user,
                     'party' => $id
-                ], 
+                ],
                 200
-            ); 
-        } catch (\Exception $exception){
+            );
+        } catch (\Exception $exception) {
             Log::error('Error cant joing to this party' . $exception->getMessage());
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'You cant joing to this party',
-                ], 
+                ],
                 400
             );
         }
-     } 
+    }
 
-    public function createParty(Request $request,$id){
-        try {            
+    public function createParty(Request $request, $id)
+    {
+        try {
             $partyName = $request->input('name');
             $userId = auth()->user()->id;
             $gameId = $id;
@@ -48,54 +50,52 @@ class PartyController extends Controller
             $party->name = $partyName;
             $party->game_id = $gameId;
             $party->user_id = $userId;
-            $party->save(); 
-           
+            $party->save();
+
             return response()->json(
                 [
-                    'success'=> true,
-                    'message'=> 'Party successfully created',
-                    'data'=> $party,
+                    'success' => true,
+                    'message' => 'Party successfully created',
+                    'data' => $party,
                 ],
-            200
+                200
             );
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             Log::error('Error cant create a party' . $exception->getMessage());
-   
-               return response()->json(
-                   [
-                       'success' => false,
-                       'message' => 'You cant create a party',
-                   ], 
-               400
-               );
-           }
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'You cant create a party',
+                ],
+                400
+            );
+        }
     }
 
-    public function leaveUserParty($id){    
+    public function leaveUserParty($id)
+    {
         try {
-         Log::info('Saliendo de la party');
-
+            Log::info('Saliendo de la party');
             $userId = auth()->user()->id;
             $partyId = $id;
- 
             $user = User::query()->find($userId);
             //recuperamos la party en la que el user esta unido
             $party = Party::query()->find($partyId);
-            //comprobamos que el user esta asociado a la party
-            // $asoc_existe = DB::table('party_user')->where('party_id', $partyId)->value('id');
-            // Log::info('asco ' . $asoc_existe);
+            $isInParty = DB::table('party_user')->where('user_id', $userId)->pluck('party_id')->contains($partyId);
+
             //validamos que si NO esta asociado, nos salte error 
-            // if(!$partyId){
-            //     return response()->json(
-            //         [
-            //             'success' => false,
-            //             'message' => 'User is not added to this party'                        
-            //         ], 
-            //     400
-            //     );
-            // }
-            
-            $user->party()->detach($partyId);  
+            if (!$isInParty) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'User is not added to this party'
+                    ],
+                    400
+                );
+            }
+
+            $user->party()->detach($partyId);
 
             return response()->json(
                 [
@@ -103,19 +103,19 @@ class PartyController extends Controller
                     'message' => 'Congrats you leave from this party',
                     'data' => $user,
                     'party' => $party
-                ], 
+                ],
                 200
-            ); 
-        } catch (\Exception $exception){
-         Log::error('Error cant leave from this party' . $exception->getMessage());
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error cant leave from this party' . $exception->getMessage());
 
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'You cant leave from this party',
-                ], 
-            400
+                ],
+                400
             );
         }
-     }
+    }
 }

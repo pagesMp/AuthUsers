@@ -69,7 +69,6 @@ class MessageController extends Controller
     }
 
     public function viewMessages($id){
-
         try {
             $partyId = $id;
             $messages = Message::query()->where('party_id', $partyId)->orderBy('id','ASC')->get(['text','created_at']);
@@ -82,11 +81,7 @@ class MessageController extends Controller
                     ], 
                 400
                 );
-            }
-            //ordenamos los mensajes descendentemente
-            // $orderedMessages = $messages->sortByDesc('created_at');
-            // $orderedMessages->values()->all();
-
+            }           
             return response()->json(
                 [
                     'success' => true,
@@ -95,17 +90,16 @@ class MessageController extends Controller
                 ], 
             200
             );
-
         } catch (\Exception $exception){
             Log::error('Error cant find messages' . $exception->getMessage());
    
                return response()->json(
-                   [
+                    [
                        'success' => false,
                        'message' => 'You cant find messages',
-                   ], 
-               400
-               );
+                    ], 
+                    400
+                );
         }
     }
 

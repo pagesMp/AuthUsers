@@ -73,7 +73,7 @@ Route::group(
 Route::group(
     ['middleware' => 'jwt.auth'],
     function(){
-        Route::post('/adUserParty/{id}', [PartyController::class, 'adUserParty']);
+        Route::post('/addUserParty/{id}', [PartyController::class, 'addUserParty']);
         Route::delete('/leaveUserParty/{id}', [PartyController::class, 'leaveUserParty']);
         Route::post('/createParty/{id}', [PartyController::class, 'createParty']);       
     }

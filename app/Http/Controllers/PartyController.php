@@ -9,46 +9,36 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PartyController extends Controller
-{
-         
-    public function adUserParty($id){
-    
+{         
+    public function addUserParty($id){
         try {
-         Log::info('entrando a la party');
-
+        Log::info('entrando a la party');
             $userId = auth()->user()->id;
-            $partyId = $id;
- 
-            $user = User::query()->find($userId);         
-            $party = Party::query()->find($partyId);
-            
-            $user->party()->attach($party);  
+            $user = User::query()->find($userId); 
+            $user->party()->attach($id);  
 
             return response()->json(
-            [
-                'success' => true,
-                'message' => 'Congrats you added correctly to this party',
-                'data' => $user, $party
-            ], 
-        200
-        );
- 
+                [
+                    'success' => true,
+                    'message' => 'Congrats you added correctly to this party',
+                    'data' => $user, $id
+                ], 
+             200
+            ); 
         } catch (\Exception $exception){
-         Log::error('Error cant joing to this party' . $exception->getMessage());
-
+            Log::error('Error cant joing to this party' . $exception->getMessage());
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'You cant joing to this party',
                 ], 
-            400
+                400
             );
         }
      } 
 
     public function createParty(Request $request,$id){
-        try {
-            
+        try {            
             $partyName = $request->input('name');
             $userId = auth()->user()->id;
             $gameId = $id;
@@ -67,7 +57,6 @@ class PartyController extends Controller
                 ],
             200
             );
-
         }catch (\Exception $exception){
             Log::error('Error cant create a party' . $exception->getMessage());
    
@@ -81,8 +70,7 @@ class PartyController extends Controller
            }
     }
 
-    public function leaveUserParty($id){
-    
+    public function leaveUserParty($id){    
         try {
          Log::info('Saliendo de la party');
 

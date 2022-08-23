@@ -72,7 +72,7 @@ class MessageController extends Controller
 
         try {
             $partyId = $id;
-            $messages = Message::query()->where('party_id', $partyId)->get(['text','created_at']);
+            $messages = Message::query()->where('party_id', $partyId)->orderBy('id','DESC')->get(['text','created_at']);
 
             if(count($messages) == 0 ){
                 return response()->json(
@@ -84,14 +84,14 @@ class MessageController extends Controller
                 );
             }
             //ordenamos los mensajes descendentemente
-            $orderedMessages = $messages->sortByDesc('created_at');
-            $orderedMessages->values()->all();
+            // $orderedMessages = $messages->sortByDesc('created_at');
+            // $orderedMessages->values()->all();
 
             return response()->json(
                 [
                     'success' => true,
                     'message' => 'You can see all message from this party',
-                    'data' => $orderedMessages
+                    'data' => $messages
                 ], 
             200
             );

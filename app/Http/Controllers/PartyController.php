@@ -76,7 +76,7 @@ class PartyController extends Controller
          Log::info('Saliendo de la party');
 
             $userId = auth()->user()->id;
-            // $partyId = $id;
+            $partyId = $id;
  
             $user = User::query()->find($userId);  
 
@@ -95,7 +95,7 @@ class PartyController extends Controller
             //     );
             // }
             
-            $user->party()->detach($id);  
+            $user->party()->detach($partyId);  
 
             return response()->json(
                 [

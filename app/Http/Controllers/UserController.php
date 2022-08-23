@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {   
     const USER_ROLE = 1;
-    const ADMIN_ROLE = 2;
-    const SUPER_ADMIN_ROLE = 3;
+    const ADMIN_ROLE = 11;
+    const SUPER_ADMIN_ROLE = 21;
 
     public function adSuperAdmin($id)
     {

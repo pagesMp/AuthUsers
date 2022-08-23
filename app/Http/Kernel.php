@@ -1,7 +1,7 @@
 <?php
 
-// namespace App\Http;
-namespace App\Http\Middleware;
+namespace App\Http;
+
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 

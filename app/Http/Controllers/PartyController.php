@@ -21,9 +21,10 @@ class PartyController extends Controller
                 [
                     'success' => true,
                     'message' => 'Congrats you added correctly to this party',
-                    'data' => $user, $id
+                    'data' => $user,
+                    'party' => $id
                 ], 
-             200
+                200
             ); 
         } catch (\Exception $exception){
             Log::error('Error cant joing to this party' . $exception->getMessage());

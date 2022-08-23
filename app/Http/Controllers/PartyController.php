@@ -79,20 +79,21 @@ class PartyController extends Controller
             $partyId = $id;
  
             $user = User::query()->find($userId);
+            //recuperamos la party en la que el user esta unido
             $party = Party::query()->find($partyId);
             //comprobamos que el user esta asociado a la party
             // $asoc_existe = DB::table('party_user')->where('party_id', $partyId)->value('id');
             // Log::info('asco ' . $asoc_existe);
             //validamos que si NO esta asociado, nos salte error 
-            // if(!$asoc_existe){
-            //     return response()->json(
-            //         [
-            //             'success' => false,
-            //             'message' => 'User is not added to this party'                        
-            //         ], 
-            //     400
-            //     );
-            // }
+            if(!$partyId){
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'User is not added to this party'                        
+                    ], 
+                400
+                );
+            }
             
             $user->party()->detach($partyId);  
 

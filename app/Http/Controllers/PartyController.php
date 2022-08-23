@@ -78,9 +78,8 @@ class PartyController extends Controller
             $userId = auth()->user()->id;
             $partyId = $id;
  
-            $user = User::query()->find($userId);  
-
-            // $party = Party::query()->find($partyId);
+            $user = User::query()->find($userId);
+            $party = Party::query()->find($partyId);
             //comprobamos que el user esta asociado a la party
             // $asoc_existe = DB::table('party_user')->where('party_id', $partyId)->value('id');
             // Log::info('asco ' . $asoc_existe);
@@ -102,7 +101,7 @@ class PartyController extends Controller
                     'success' => true,
                     'message' => 'Congrats you leave from this party',
                     'data' => $user,
-                    // 'party' => $party
+                    'party' => $party
                 ], 
                 200
             ); 

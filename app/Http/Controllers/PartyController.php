@@ -76,35 +76,36 @@ class PartyController extends Controller
          Log::info('Saliendo de la party');
 
             $userId = auth()->user()->id;
-            $partyId = $id;
+            // $partyId = $id;
  
-            $user = User::query()->find($userId);         
-            $party = Party::query()->find($partyId);
+            $user = User::query()->find($userId);  
+
+            // $party = Party::query()->find($partyId);
             //comprobamos que el user esta asociado a la party
-            $asoc_existe = DB::table('party_user')->where('party_id', $partyId)->value('id');
-            Log::info('asco ' . $asoc_existe);
+            // $asoc_existe = DB::table('party_user')->where('party_id', $partyId)->value('id');
+            // Log::info('asco ' . $asoc_existe);
             //validamos que si NO esta asociado, nos salte error 
-            if(!$asoc_existe){
-                return response()->json(
-                    [
-                        'success' => false,
-                        'message' => 'User is not added to this party'                        
-                    ], 
-                400
-                );
-            }
+            // if(!$asoc_existe){
+            //     return response()->json(
+            //         [
+            //             'success' => false,
+            //             'message' => 'User is not added to this party'                        
+            //         ], 
+            //     400
+            //     );
+            // }
             
-            $user->party()->detach($party);  
+            $user->party()->detach($id);  
 
             return response()->json(
-            [
-                'success' => true,
-                'message' => 'Congrats you leave from this party',
-                'data' => $user , $party
-            ], 
-        200
-        );
- 
+                [
+                    'success' => true,
+                    'message' => 'Congrats you leave from this party',
+                    'data' => $user,
+                    // 'party' => $party
+                ], 
+                200
+            ); 
         } catch (\Exception $exception){
          Log::error('Error cant leave from this party' . $exception->getMessage());
 

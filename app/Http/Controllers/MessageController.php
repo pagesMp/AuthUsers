@@ -72,7 +72,7 @@ class MessageController extends Controller
 
         try {
             $partyId = $id;
-            $messages = Message::query()->where('party_id', $partyId)->orderBy('id','DESC')->get(['text','created_at']);
+            $messages = Message::query()->where('party_id', $partyId)->orderBy('id','ASC')->get(['text','created_at']);
 
             if(count($messages) == 0 ){
                 return response()->json(

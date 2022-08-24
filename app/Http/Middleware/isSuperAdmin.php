@@ -35,5 +35,6 @@ class IsSuperAdmin
             );
         }
         return $next($request);
+        
     }
 }

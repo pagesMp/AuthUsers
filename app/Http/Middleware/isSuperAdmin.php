@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class isSuperAdmin
+class IsSuperAdmin
 {
     /**
      * Handle an incoming request.
